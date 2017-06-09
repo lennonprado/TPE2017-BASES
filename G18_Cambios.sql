@@ -12,12 +12,17 @@
 
 -- Restriccion en tabla nueva a crear
     
-    SELECT idCompetencia FROM GR18_Competencia
-    WHERE NOT EXIST (SELECT idCompetencia FROM GR18_JuezCompetencia)
+
+ALTER TABLE GR18_Competencia 
+ADD CONSTRAINT gr18_ck_1 CHECK ( cantJueces > 0 ); 
+
+
 
 -- b. Un deportista no puede formar parte de más de tres equipos en un mismo año.
 -- Restriccion en tabla GR18_Inscripcion
 
+CREATE ASSERSTION gr18_ck_2
+CHECK NOT EXISTS ( 
     SELECT COUNT(tipoDoc,nroDoc) as cantidad, EXTRACT (YEAR from fecha) AS anio
     FROM GR18_Inscripcion I
     JOIN GR18_EquipoDeportista E
@@ -25,7 +30,7 @@
     WHERE I.Equipo_id IS NOT NULL
     GROUP BY anio
     HAVING cantidad > 3   
-
+);
 
 -- c. Las inscripciones no se pueden realizar luego de la fecha límite de inscripción.
 -- Restriccion en tabla GR18_Inscripcion
@@ -108,31 +113,35 @@
 ---
 --- 1)
 
-CREATE OR REPLACE FUNCTION lista_deportista(INTEGER) RETURNS SETOF RECORDS AS $A$
+CREATE OR REPLACE FUNCTION lista_deportista(INTEGER) RETURNS TABLE() AS $A$
 DECLARE
 	mi_consulta RECORD;
 BEGIN
-	DELETE FROM REPORTEPROBLEMA;
 	FOR mi_consulta IN 
-
-        SELECT * FROM  GR18_Competencia C
+        SELECT * 
+        FROM  GR18_Competencia C
         JOIN GR18_Inscripcion I
         ON ( I.idCompetencia = C.idCompetencia )
-        JOIN LEFT GR18_Equipo E
+        LEFT JOIN GR18_Equipo E
         ON ( E.id = I.Equipo_id )
-        JOIN LEFT GR18_EquipoDeportista ED
+        LEFT JOIN GR18_EquipoDeportista ED
         ON ( E.id = ED.id )
-        JOIN LEFT GR18_Deportista D
+        LEFT JOIN GR18_Deportista D
         ON ( ED.tipoDoc = D.tipoDoc AND E.nroDoc = D.nroDoc )
- --       JOIN LEFT GR18_Deportista DD
-  --      ON ( ED.tipoDoc = DD.tipoDoc AND 
-   --     E.nroDoc = DD.nroDoc ) 
+   
+        LEFT JOIN GR18_Deportista DD
+        ON ( I.tipoDoc = DD.tipoDoc AND I.nroDoc = DD.nroDoc ) 
         JOIN GR18_Persona P
         ON ( P.tipoDoc = D.tipoDoc AND P.nroDoc = D.nroDoc ) 
         WHERE idCompetencia = $1
+	LOOP
 
-		LOOP
-		INSERT INTO REPORTEPROBLEMA VALUES (
+
+
+
+    --        mostrar mi record
+
+		--INSERT INTO REPORTEPROBLEMA VALUES (
 				--mi_consulta.id_producto, 
                 -- no se como hacerlo aca
     END LOOP;

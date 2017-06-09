@@ -266,5 +266,148 @@ ALTER TABLE GR18_Categoria ADD CONSTRAINT FK_GR18_categoria_disciplina
     INITIALLY IMMEDIATE
 ;
 
--- End of file.
+
+
+------ inserts
+--
+--
+--
+--
+-- Data for Name: gr18_disciplina; Type: TABLE DATA; Schema: unc_246449; Owner: unc_246449
+--
+
+INSERT INTO gr18_disciplina VALUES ('FUT', 'Fulbol 11', 'Fultbol 11');
+INSERT INTO gr18_disciplina VALUES ('Tenis', 'Tenis Men', 'Tenis singler men');
+INSERT INTO gr18_disciplina VALUES ('Pad', 'Paddel', 'Padel por equipo');
+INSERT INTO gr18_disciplina VALUES ('FUT2', 'Futbol', 'Futbol 11');
+INSERT INTO gr18_disciplina VALUES ('FUT1', 'Futbol', 'Futbol 5');
+INSERT INTO gr18_disciplina VALUES ('TEN1', 'Tenis', 'Tenis single');
+INSERT INTO gr18_disciplina VALUES ('TEN2', 'Tenis', 'Tenis dobles');
+
+
+--
+-- Data for Name: gr18_categoria; Type: TABLE DATA; Schema: unc_246449; Owner: unc_246449
+--
+
+INSERT INTO gr18_categoria VALUES ('Seniorf', 'FUT', 'Senior-futbol', 21, 31);
+INSERT INTO gr18_categoria VALUES ('Juvenilt', 'Tenis', 'Juvenil-Tenis', 10, 20);
+INSERT INTO gr18_categoria VALUES ('Seniort', 'Tenis', 'Senior-Tenis
+', 21, 31);
+INSERT INTO gr18_categoria VALUES ('juvenilf', 'FUT', 'Juvenil-Futbol', 10, 20);
+INSERT INTO gr18_categoria VALUES ('SeniorF', 'FUT1', 'Senior-futbol', 21, 31);
+INSERT INTO gr18_categoria VALUES ('JuvenilT', 'TEN1', 'Juvenil-Tenis', 10, 20);
+INSERT INTO gr18_categoria VALUES ('SeniorT', 'TEN2', 'Senior-Tenis', 21, 31);
+INSERT INTO gr18_categoria VALUES ('JuvenilF', 'FUT1', 'Juvenil-Futbol', 10, 20);
+
+
+--
+-- Data for Name: gr18_competencia; Type: TABLE DATA; Schema: unc_246449; Owner: unc_246449
+--
+
+INSERT INTO gr18_competencia VALUES (11, 'FUT','Futbol', '2017-06-09 00:00:00', 'Futbol', 'Fl', 'bol', B'1', '2017-06-09 00:00:00', 3,'1', 'e3e3', '3e3e');
+INSERT INTO gr18_competencia VALUES (12, 'Tenis', 'tenes de noche', '2017-06-15 00:00:00', 'uncas', 'tandil', 'edu', B'1', '2017-06-16 00:00:00', 2,'1', '', '');
+INSERT INTO gr18_competencia VALUES (1, 'FUT2', 'Futbol nocturno', '2017-06-09 00:00:00', 'campus', 'tandil', 'unicen', B'0', '2017-06-15 00:00:00', 3,'0', NULL, NULL);
+INSERT INTO gr18_competencia VALUES (13, 'TEN2', 'tenes de dia', '2017-06-15 00:00:00', 'uncas', 'tandil', 'edu', B'1', '2017-06-16 00:00:00', 2,'1', '', '');
+INSERT INTO gr18_competencia VALUES (14, 'TEN1', 'tenes de tarde', '2017-06-15 00:00:00', 'uncas', 'tandil', 'edu', B'1', '2017-06-16 00:00:00', 2,'1', '', '');
+
+
+
+
+--
+-- Data for Name: gr18_federacion; Type: TABLE DATA; Schema: unc_246449; Owner: unc_246449
+--
+
+INSERT INTO gr18_federacion VALUES ('PSTA', 'FUT', 'PASTA - futbol', 2010, 100);
+INSERT INTO gr18_federacion VALUES ('SASTA', 'FUT', 'socias ... Futbol
+', 2013, 120);
+INSERT INTO gr18_federacion VALUES ('TEn', 'Tenis', 'FETENis', 2014, 300);
+INSERT INTO gr18_federacion VALUES ('FEDFUT1', 'FUT1', 'Federacion de futbol 1', 2010, 200);
+INSERT INTO gr18_federacion VALUES ('FEDFUT2', 'FUT1', 'Federacion de futbol 2', 2000, 120);
+INSERT INTO gr18_federacion VALUES ('FEDFUT3', 'FUT2', 'Federacion de futbol 3', 2010, 10);
+INSERT INTO gr18_federacion VALUES ('FEDFUT4', 'FUT2', 'Federacion de futbol 4', 2010, 230);
+INSERT INTO gr18_federacion VALUES ('FEDTEN1', 'TEN1', 'Federacion de tenis 1', 2010, 200);
+INSERT INTO gr18_federacion VALUES ('FEDTEN2', 'TEN1', 'Federacion de tenis 2', 2000, 120);
+INSERT INTO gr18_federacion VALUES ('FEDTEN3', 'TEN2', 'Federacion de tenis 1', 2010, 200);
+INSERT INTO gr18_federacion VALUES ('FEDTEN4', 'TEN2', 'Federacion de tenis 3', 2010, 10);
+
+
+--
+-- Data for Name: gr18_persona; Type: TABLE DATA; Schema: unc_246449; Owner: unc_246449
+--
+
+INSERT INTO gr18_persona VALUES ('dni', 20, 'sss', 'ssss', 'ss', 'sss', 'sss', 'f', 'ss', '1', '2001-01-01 00:00:00');
+INSERT INTO gr18_persona VALUES ('dni', 3029291, 'marcelo', 'prado', '', '', '', 'm', '', '1', '1980-05-09 00:00:00');
+INSERT INTO gr18_persona VALUES ('dni', 29587447, 'Eduardo', 'bravo', '', '', '', 'M', '', 'q', '1982-02-09 00:00:00');
+INSERT INTO gr18_persona VALUES ('dni', 34587447, 'Pedro', 'bravo', '', '', '', 'M', '', 'q', '1998-04-11 00:00:00');
+INSERT INTO gr18_persona VALUES ('dni', 43587447, 'Simon', 'bravo', '', '', '', 'M', '', 'q', '1999-03-01 00:00:00');
+
+
+--
+-- Data for Name: gr18_deportista; Type: TABLE DATA; Schema: unc_246449; Owner: unc_246449
+--
+
+INSERT INTO gr18_deportista VALUES ('dni', 20, B'1', '2017-06-22 00:00:00', '222', 'Seniorf', 'FUT', 'PSTA', 'FUT');
+INSERT INTO gr18_deportista VALUES ('dni', 29587447, B'1', '2017-06-02 00:00:00', '111111', 'Seniorf', 'FUT', 'PSTA', 'FUT');
+INSERT INTO gr18_deportista VALUES ('dni', 3029291, B'0', NULL, NULL, 'juvenilf', 'FUT', 'SASTA', 'FUT');
+INSERT INTO gr18_deportista VALUES ('dni', 43587447, B'0', NULL, NULL, 'juvenilf', 'FUT', 'SASTA', 'FUT');
+INSERT INTO gr18_deportista VALUES ('dni', 34587447, B'0', NULL, NULL, 'juvenilf', 'FUT', 'SASTA', 'FUT');
+
+
+--
+-- Data for Name: gr18_clasificacioncompetencia; Type: TABLE DATA; Schema: unc_246449; Owner: unc_246449
+--
+
+
+
+--
+-- Data for Name: gr18_equipo; Type: TABLE DATA; Schema: unc_246449; Owner: unc_246449
+--
+
+INSERT INTO gr18_equipo VALUES (2, 'TenisMar', '2011-02-21 00:00:00');
+INSERT INTO gr18_equipo VALUES (1, 'Futmagic', '2001-01-01 00:00:00');
+INSERT INTO gr18_equipo VALUES (3, 'losfunda', '2001-01-01 00:00:00');
+INSERT INTO gr18_equipo VALUES (4, 'heroes', '2001-01-01 00:00:00');
+INSERT INTO gr18_equipo VALUES (5, 'distint', '2001-01-01 00:00:00');
+
+
+--
+-- Data for Name: gr18_equipodeportista; Type: TABLE DATA; Schema: unc_246449; Owner: unc_246449
+--
+
+INSERT INTO gr18_equipodeportista VALUES (1, 'dni', 29587447);
+INSERT INTO gr18_equipodeportista VALUES (1, 'dni', 20);
+
+
+--
+-- Data for Name: gr18_inscripcion; Type: TABLE DATA; Schema: unc_246449; Owner: unc_246449
+--
+
+INSERT INTO gr18_inscripcion VALUES (12, 'dni', 20, 1, 12, '2017-06-09 00:00:00');
+INSERT INTO gr18_inscripcion VALUES (11, 'dni', 29587447, 1, 12, '2017-06-15 00:00:00');
+
+
+--
+-- Data for Name: gr18_juez; Type: TABLE DATA; Schema: unc_246449; Owner: unc_246449
+--
+
+INSERT INTO gr18_juez VALUES ('dni', 34587447, B'0', NULL);
+INSERT INTO gr18_juez VALUES ('dni', 43587447, B'1', '234424');
+
+
+--
+-- Data for Name: gr18_juezcompetencia; Type: TABLE DATA; Schema: unc_246449; Owner: unc_246449
+--
+
+INSERT INTO gr18_juezcompetencia VALUES (1, 'dni', 43587447);
+INSERT INTO gr18_juezcompetencia VALUES (1, 'dni', 34587447);
+
+
+--
+-- PostgreSQL database dump complete
+--
+
+
+ 
+ 
+ 
 
