@@ -1,9 +1,13 @@
 <?php
 
+try {
 $host = 'dbases.exa.unicen.edu.ar';/*port=5432*/
 $db = new PDO("pgsql:host=$host;port=6432;dbname=cursada", 'unc_246449', '246449');
 $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
+} catch (Exception $e) {
+   $db->rollBack();
+   echo "Failed: " . $e->getMessage();
+}
 //var_dump($_POST['fecha']);
 if(isset($_POST['idcompetencia'])){
    try {
