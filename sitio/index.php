@@ -4,12 +4,22 @@ $host = 'dbases.exa.unicen.edu.ar';/*port=5432*/
 $db = new PDO("pgsql:host=$host;port=6432;dbname=cursada", 'unc_246449', '246449');
 $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
+//var_dump($_POST['fecha']);
+if(isset($_POST['idcompetencia'])){
+   try {
+   $sentencia = $db->prepare("INSERT INTO gr18_competencia (idcompetencia,cdodisciplina,nombre,fecha,nombrelugar,nombrelocalidad,organizador,individual,fechalimiteinscripcion,cantjueces,coberturatv,mapa,web) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)");
+   $db->beginTransaction();
+   $sentencia->execute(array($_POST['idcompetencia'],$_POST['cdodisciplina'],$_POST['nombre'],$_POST['fecha'],$_POST['nombrelugar'],$_POST['nombrelocalidad'],$_POST['organizador'],$_POST['individual'],$_POST['fechalimiteinscripcion'],$_POST['cantjueces'],$_POST['coberturatv'],$_POST['mapa'],$_POST['web']));
+   $db->commit();
+   } catch (Exception $e) {
+      $db->rollBack();
+      echo "Failed: " . $e->getMessage();
+}
+}
+
 $sql = $db->prepare('SELECT * FROM gr18_disciplina ');
 $sql->execute();
 $disiplina = $sql->fetchAll();
-
-//var_dump($disiplina);
-
 
 $sql = $db->prepare('SELECT * FROM gr18_competencia ');
 $sql->execute();
@@ -76,34 +86,49 @@ $res = $sql->fetchAll();
           </tr>
         </thead>
         <tbody>
-           <form action="index.php" method="post">
+           <form name="nuevo" id="nuevo" action="index.php" method="post">
            <tr>
-             <td><input type="text" name="" id="" /></td>
+             <td><input type="number" name="idcompetencia" id="idcompetencia" /></td>
              <td>
-               <select >
+               <select name="cdodisciplina" id="cdodisciplina" >
                   <? for($t=0;$t<count($disiplina);$t++){?>
                      <option value="<?=$disiplina[$t]['cdodisciplina']?>"><?=$disiplina[$t]['nombre']?></option>
                   <? } ?>
                </select>
              </td>
-             <td><input type="text" name="" id="" /></td>
-             <td><input type="date" name="" id="" /></td>
-             <td><input type="text" name="" id="" /></td>
-             <td><input type="text" name="" id="" /></td>
-             <td><input type="text" name="" id="" /></td>
-             <td><select><option value="1">Indibidual</option><option value="0">Por Equipo</option></select></td>
-             <td><input type="date" name="" id="" /></td>
-             <td><input type="text" name="" id="" /></td>
-             <td><input type="text" name="" id="" /></td>
-             <td><select><option value="1">Si</option><option value="0">no</option></select></td>
-             <td><input type="text" name="" id="" /></td>
-             <td><input type="text" name="" id="" /></td>
+             <td><input type="text" name="nombre" id="nombre" /></td>
+             <td><input type="date" name="fecha" id="fecha" /></td>
+             <td><input type="text" name="nombrelugar" id="nombrelugar" /></td>
+             <td><input type="text" name="nombrelocalidad" id="nombrelocalidad" /></td>
+             <td><input type="text" name="organizador" id="organizador" /></td>
+             <td><select name="individual" id="individual"><option value="1">Indibidual</option><option value="0">Por Equipo</option></select></td>
+             <td><input type="date" name="fechalimiteinscripcion" id="fechalimiteinscripcion" /></td>
+             <td><input type="text" name="cantjueces" id="cantjueces" /></td>
+             <td><select name="coberturatv" id="coberturatv"><option value="1">Si</option><option value="0">no</option></select></td>
+             <td><input type="text" name="mapa" id="mapa" /></td>
+             <td><input type="text" name="web" id="web" /></td>
+             <td><input type="submit" name="agregar" id="agregar" value="agregar" /></td>
            </tr>
            </form>
            <?
            if($res){
              for($i=0;$i<count($res);$i++){?>
-                <tr> <td scope="row">1</td> <td>Mark</td> <td>Otto</td> <td>@mdo</td> </tr>
+                <tr>
+                   <td><?=$res[$i]['idcompetencia']?></td>
+                   <td><?=$res[$i]['cdodisciplina']?></td>
+                   <td><?=$res[$i]['nombre']?></td>
+                   <td><?=$res[$i]['fecha']?></td>
+                   <td><?=$res[$i]['nombrelugar']?></td>
+                   <td><?=$res[$i]['nombrelocalidad']?></td>
+                   <td><?=$res[$i]['organizador']?></td>
+                   <td><?=$res[$i]['individual']?></td>
+                   <td><?=$res[$i]['fechalimiteinscripcion']?></td>
+                   <td><?=$res[$i]['cantjueces']?></td>
+                   <td><?=$res[$i]['coberturatv']?></td>
+                   <td><?=$res[$i]['mapa']?></td>
+                   <td><?=$res[$i]['web']?></td>
+                   <td></td>
+                </tr>
            <?}}else { ?>
               <tr> <td colspan="4">Sin datos</td> </tr>
            <? }?>

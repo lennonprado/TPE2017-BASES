@@ -1,4 +1,45 @@
+<?php
 
+$host = 'dbases.exa.unicen.edu.ar';/*port=5432*/
+$db = new PDO("pgsql:host=$host;port=6432;dbname=cursada", 'unc_246449', '246449');
+$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+//var_dump($_POST['fecha']);
+if(isset($_POST['nrodoc'])){
+   try {
+   $sentencia = $db->prepare("INSERT INTO gr18_deportista (tipodoc,nrodoc,federado,fechaultimafederacion,nrolicencia,cdocategoria,cdodisciplina,cdofederacion,cdodisciplinafederacion) VALUES(?,?,?,?,?,?,?,?,?)");
+   $db->beginTransaction();
+   $sentencia->execute(array($_POST['tipodoc'],$_POST['nrodoc'],$_POST['federado'],$_POST['fechaultimafederacion'],$_POST['nrolicencia'],$_POST['cdocategoria'],$_POST['cdodisciplina'],$_POST['cdofederacion'],$_POST['cdodisciplinafederacion']));
+   $db->commit();
+   } catch (Exception $e) {
+      $db->rollBack();
+      echo "Failed: " . $e->getMessage();
+}
+}
+
+$sql = $db->prepare('SELECT * FROM gr18_disciplina ');
+$sql->execute();
+$disiplina = $sql->fetchAll();
+
+$sql = $db->prepare('SELECT * FROM gr18_categoria ');
+$sql->execute();
+$categoria = $sql->fetchAll();
+
+$sql = $db->prepare('SELECT * FROM gr18_federacion ');
+$sql->execute();
+$federacion = $sql->fetchAll();
+
+$sql = $db->prepare('SELECT * FROM gr18_persona ');
+$sql->execute();
+$persona = $sql->fetchAll();
+
+$sql = $db->prepare('SELECT * FROM gr18_deportista ');
+$sql->execute();
+$res = $sql->fetchAll();
+
+
+
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -38,15 +79,97 @@
     </div>
   </nav>
   <main class="container">
-     <h1>Deportistas</h1>
-     <table class="table">        
+     <h1>Deportista</h1>
+     <table class="table">
         <thead>
-           <tr> <th>#</th> <th>First Name</th> <th>Last Name</th> <th>Username</th> </tr>
+           <tr>
+             <th>tipodoc</th>
+             <th>persona</th>
+             <th>federado</th>
+             <th>fechaultimafederacion</th>
+             <th>nrolicencia</th>
+             <th>cdocategoria</th>
+             <th>cdodisciplina</th>
+             <th>cdofederacion</th>
+             <th>cdodisciplinafederacion</th>
+             <th>Accion</th>
+          </tr>
         </thead>
         <tbody>
-           <tr> <th scope="row">1</th> <td>Mark</td> <td>Otto</td> <td>@mdo</td> </tr>
-           <tr> <th scope="row">2</th> <td>Jacob</td> <td>Thornton</td> <td>@fat</td> </tr>
-           <tr> <th scope="row">3</th> <td>Larry</td> <td>the Bird</td> <td>@twitter</td> </tr>
+           <form name="nuevo" id="nuevo" action="deportista.php" method="post">
+           <tr>
+             <td>
+                <select name="tipodoc" id="tipodoc" >
+                  <? for($t=0;$t<count($persona);$t++){?>
+                     <option value="<?=$persona[$t]['tipodoc']?>"><?=$persona[$t]['tipodoc']?></option>
+                  <? } ?>
+               </select>
+             </td>
+             <td><select name="nrodoc" id="nrodoc" >
+               <? for($t=0;$t<count($persona);$t++){?>
+                  <option value="<?=$persona[$t]['nrodoc']?>"><?=$persona[$t]['nombre']?></option>
+               <? } ?>
+            </select>
+         </td>
+             <td>
+                <select name="federado" id="federado">
+                   <option value="1">SI</option>
+                   <option value="0">NO</option>
+                </select>
+             </td>
+             <td><input type="date" name="fechaultimafederacion" id="fechaultimafederacion" /></td>
+             <td><input type="number" name="nrolicencia" id="nrolicencia" /></td>
+
+             <td>
+               <select name="cdocategoria" id="cdocategoria" >
+                  <? for($t=0;$t<count($categoria);$t++){?>
+                     <option value="<?=$categoria[$t]['cdocategoria']?>"><?=$categoria[$t]['descripcion']?></option>
+                  <? } ?>
+               </select>
+             </td>
+             <td>
+               <select name="cdodisciplina" id="cdodisciplina" >
+                  <? for($t=0;$t<count($disiplina);$t++){?>
+                     <option value="<?=$disiplina[$t]['cdodisciplina']?>"><?=$disiplina[$t]['nombre']?></option>
+                  <? } ?>
+               </select>
+             </td>
+             <td>
+               <select name="cdofederacion" id="cdofederacion" >
+                  <? for($t=0;$t<count($federacion);$t++){?>
+                     <option value="<?=$federacion[$t]['cdofederacion']?>"><?=$federacion[$t]['nombre']?></option>
+                  <? } ?>
+               </select>
+             </td>
+             <td>
+               <select name="cdodisciplinafederacion" id="cdodisciplinafederacion" >
+                  <? for($t=0;$t<count($federacion);$t++){?>
+                     <option value="<?=$federacion[$t]['cdodisciplina']?>"><?=$federacion[$t]['nombre']?></option>
+                  <? } ?>
+               </select>
+             </td>
+             <td><input type="submit" name="agregar" id="agregar" value="agregar" /></td>
+           </tr>
+           </form>
+           <?
+           if($res){
+             for($i=0;$i<count($res);$i++){?>
+                <tr>
+                   <td><?=$res[$i]['tipodoc']?></td>
+                   <td><?=$res[$i]['nrodoc']?></td>
+                   <td><?=$res[$i]['federado']?></td>
+                   <td><?=$res[$i]['fechaultimafederacion']?></td>
+                   <td><?=$res[$i]['nrolicencia']?></td>
+                   <td><?=$res[$i]['cdocategoria']?></td>
+                   <td><?=$res[$i]['cdodisciplina']?></td>
+                   <td><?=$res[$i]['cdofederacion']?></td>
+                   <td><?=$res[$i]['cdodisciplinafederacion']?></td>                          
+                   <td></td>
+                </tr>
+           <?}}else { ?>
+              <tr> <td colspan="4">Sin datos</td> </tr>
+           <? }?>
+
         </tbody>
      </table>
   </main>
@@ -56,6 +179,5 @@
   <!-- Latest compiled and minified JavaScript -->
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
   <!-- Nuestros Js -->
-
 </body>
 </html>
