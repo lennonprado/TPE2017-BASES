@@ -1,0 +1,499 @@
+/*
+Version: 1
+Descripcion: Portal de maquinarias agricolas
+Autores: Eduardo Bravo, Marcelo Prado
+*/
+
+/*---------------------------------------------------------------------------*/
+/* General styles
+/*---------------------------------------------------------------------------*/
+/*body,button,input,label,select,td,textarea{
+	font-family:'lucida grande',tahoma,verdana,arial,sans-serif;
+	font-size:11px;
+}*/
+
+h1,h2,h3,h4,h5,h6{
+	color: #858585;
+}
+
+h1 { font-size: 24px; }
+
+h2 { font-size: 20px; }
+
+h3 {
+	font-weight: bold;
+	color: #828282;
+	text-shadow: 1px 1px 0px rgba(100, 100, 100, 0.1);
+	border-bottom: 1px solid #cccccc;
+	width: 100%;
+	padding-bottom: 20px;
+	margin-bottom: 20px;
+	margin-top: 10px;
+	font-size: 22px;
+	text-transform: uppercase;
+	}
+
+h4 {
+	font-size: 16px;
+	font-weight: normal;
+	color: #828282;
+	font-weight: 400;
+	text-transform: uppercase;
+	border-bottom: 1px solid #AAA;
+	width: 100%;
+	padding-bottom: 10px;
+	margin-bottom: 20px;
+	}
+
+h5 {
+	font-size: 14px;
+	font-weight: 400;
+ }
+
+h6 { font-size: 13px; }
+
+p{margin:1em 0}
+
+a{
+	color: #444444;
+	text-decoration:none;
+}
+
+a:hover {
+	text-decoration:underline;
+	color: #FFCD00;
+}
+
+a.advancedSearch {
+	margin-left: 10px;
+	font-style: italic;
+}
+
+ul{
+	list-style-type:none;
+	margin:0;
+	padding:0
+	}
+
+label{
+	color:#666;
+	font-weight:bold;
+	vertical-align:middle;
+	display: block;
+	margin-bottom: 5px;
+	font-style: italic;
+}
+
+label input{
+	font-weight:normal;
+}
+
+label.label-chbx { margin-top: -10px; }
+
+textarea {
+	max-width:100%;
+	color: #646464;
+	float: left;
+	display: block;
+	overflow: auto;
+	width: 90%;
+	min-height: 60px;
+	line-height: 1.7em;
+	border-radius: 2px;
+	border:1px solid #bdc7d8;
+	margin:0;
+	padding:3px;
+ }
+
+time{
+	font-size: 7px;
+	font-weight: bold;
+}
+
+.button {
+	font-size: 12px;
+	display: inline-block;
+	padding: 5px 16px;
+}
+
+.button, input[type="submit"], button {
+	color: #000000 !important;
+	background: #FFCD00;
+	font-weight: 400;
+	height: auto;
+	padding: 5px 16px;
+	margin: 13px 0px 0px;
+	text-transform: uppercase;
+	border: none;
+}
+
+/*---------------------------------------------------------------------------*/
+/* Headers styles
+/*---------------------------------------------------------------------------*/
+
+#header {
+	border-top: 5px solid #000000;
+	border-bottom: 1px solid #e4e4e4;
+	background-color: #FFF;
+	height:140px;
+ }
+
+ #header ul {
+	 margin-top: 40px;
+ }
+
+#logo {
+	float: left;
+	margin: 20px 0px;
+	background:url(../img/logo.png);
+}
+#logo a { display: block; width: 250px; height: 90px; }
+#logo h1 { margin: 0px; text-indent: -9999px; }
+#logo img { border: 0px; }
+
+.navigation {
+	position: relative;
+	float: right;
+	margin: 50px 0px;
+	font-size: 13px;
+	font-weight: 600;
+	text-transform: uppercase;
+}
+.navigation ul a {
+	display: block; l
+	0ine-height: 30px;
+	color: #000000;
+}
+.navigation ul a:hover { color: #666666; }
+.navigation ul li {
+	float: left;
+	position: relative;
+	padding-left: 20px;
+}
+.navigation ul ul li { float: left; min-width: 130px; }
+
+.navigation ul li:hover ul, .navigation ul li.sfHover ul { position:absolute; left: 0px; top: 30px; z-index: 99; }
+.navigation ul li ul {
+	position: absolute;
+	width: auto;
+	left: -999em;
+	padding: 4px 0px;
+}
+.navigation ul li:hover li ul,
+.navigation ul li.sfHover li ul { top: -9999em; }
+.navigation ul li li:hover ul,
+.navigation ul li li.sfHover ul { left: 155px; top: 2px; }
+
+.destacados  ul li {
+	height: 210px;
+}
+
+.destacados  ul li img{
+	height: 156px;
+	width: 100%;
+	border:#CCC 1px solid;
+}
+
+.destacados h6 {
+	padding: 0px 5px;
+	font-weight: 600;
+	font-family: Arial, serif, sans-serif;
+	text-align: center;
+	margin-top:0px;
+}
+
+/*---------------------------------------------------------------------------*/
+/* NuesstrasMarcas styles
+/*---------------------------------------------------------------------------*/
+
+/*.marcas{margin-right:19px; }
+
+.marcas .marca-logo{width: 92px; height: 63px;}*/
+
+#menu-footer-menu{ margin-left:10px;}
+
+
+/*---------------------------------------------------------------------------*/
+/* Content Styles
+/*---------------------------------------------------------------------------*/
+
+.maquina-features ul li {
+	border-bottom: 1px dotted #e2e2e2;
+	padding:5px;
+}
+
+.maquina-features ul li span {
+	text-shadow: 0px -1px 0px rgba(100, 100, 100, 0.1);
+}
+
+.img_texto{
+	width:260px;
+	float:left;
+	margin-right:10px
+}
+.img_face{
+	width: 200px;
+	margin-left: 40px;
+}
+
+.browser-cat { text-transform: uppercase; }
+.browser-cat h5 {
+	margin-bottom: 12px;
+	color: #ff7777;
+	border-bottom: 1px solid #ff7777;
+}
+.browser-cat ul { margin-bottom: 20px; }
+.browser-cat ul li { padding: 3px 0px; }
+.browser-cat ul.by-year li {
+	float: left;
+	width: 150px;
+	margin-right:0px;
+}
+
+.browser-cat ul li { border-bottom: 1px dotted #e2e2e2; }
+
+/*---------------------------------------------------------------------------*/
+/* Footer Styles
+/*---------------------------------------------------------------------------*/
+
+#footer {
+	position: relative;
+	padding-top: 30px;
+	padding-bottom: 10px;
+	margin-top: 30px;
+	margin-bottom: 0px;
+	position:relative;
+	float:left;
+	width:100%;
+	height:280px;
+	margin-bottom:20px;
+}
+#footer ul li { padding: 3px 0px; }
+
+#footer-contact-info {
+	margin: 0px;
+	padding-top:10px;
+	padding-bottom:10px;
+	float:left;
+	width:100%;
+	position:relative;
+}
+
+#footer-contact-info a:hover { text-decoration: none; }
+
+#footer-contact-info ul {
+	margin-left:10px;
+}
+
+#footer-contact-info ul li {
+	display: inline;
+	padding-left: 22px;
+	padding-right: 20px;
+	height: 20px;
+}
+
+#footer-contact-info ul li.address {
+	background: transparent url(../img/icon-set.png) no-repeat 0px -142px;
+}
+
+#footer-contact-info ul li.tel {
+	background: transparent url(../img/icon-set.png) no-repeat 0px -162px;
+}
+
+#footer-contact-info ul li.email {
+	background: transparent url(../img/icon-set.png) no-repeat 0px -118px;
+}
+
+#footer-contact-info ul li.twitter {
+	background: transparent url(../img/icon-set.png) no-repeat 0px -182px;
+}
+
+#footer-contact-info ul li.facebook {
+	background: transparent url(../img/icon-set.png) no-repeat 0px -202px;
+}
+
+#footer-bottom {
+	padding: 10px 0px;
+	margin-top: 0px;
+	margin-bottom: 0px;
+	font-size: 11px;
+	text-transform: uppercase;
+	float:left;
+	width:100%;
+	position:relative;
+}
+
+#footer-bottom ul li {
+	display: inline;
+	padding-right: 12px;
+}
+
+#footer-bottom a:hover { text-decoration: none; }
+
+#footer-bottom .footer-notice {
+	float: right;
+	text-align: right;
+	margin-right:10px;
+}
+
+#footer {
+	border-top: 4px solid #FFCD00;
+	background-color: #efefef;
+	background-color: rgba(141,141,141,0.2);
+}
+
+#footer-contact-info {
+	color: #dddddd;
+	background-color:#333;
+}
+
+#footer-contact-info a {
+	color: #dddddd;
+}
+
+#footer-contact-info a:hover { color: #ff7777; }
+
+
+#footer-contact-info ul li.address {
+	background: transparent url(../img/icon-set.png) no-repeat 0px -142px;
+}
+
+#footer-contact-info ul li.tel {
+	background: transparent url(../img/icon-set.png) no-repeat 0px -162px;
+}
+
+#footer-contact-info ul li.email {
+	background: transparent url(../img/icon-set.png) no-repeat 0px -118px;
+}
+
+#footer-contact-info ul li.twitter {
+	background: transparent url(../img/icon-set.png) no-repeat 0px -182px;
+}
+
+#footer-contact-info ul li.facebook {
+	background: transparent url(../img/icon-set.png) no-repeat 0px -202px;
+}
+
+#footer-bottom {
+	color: #eeeeee;
+	text-transform: uppercase;
+	background-color: #000000;
+}
+
+#footer-bottom a {
+	color: #eeeeee;
+}
+
+#footer-bottom a:hover { color: #ff7777; }
+
+/*---------------------------------------------------------------------------*/
+/* Caracteristicas Styles
+/*--------------------------------------------------------------------------
+
+.Caracteristicas th{
+	background-color:#FFCD00;
+	color:#444444;
+}
+
+.Caracteristicas td{
+	border-bottom:#CCC 1px dotted;
+	padding:5px 30px 5px 30px;
+}
+.Caracteristicas tbody td.negrita{
+	font-weight:bold !important;
+}
+
+
+/*---------------------------------------------------------------------------*/
+/* ListadoMaquinas Styles
+/*---------------------------------------------------------------------------*/
+
+#ListadoMaquinas ul li{
+	margin-bottom:20px;
+	height:200px
+}
+
+#ListadoMaquinas h3{
+	margin-bottom:0px !important;
+	padding:5px;
+	margin-top:0px;
+	border:none;
+}
+
+#ListadoMaquinas h3 a{
+	font-size:13px !important;
+	color:#999 !important;
+	text-transform:none;
+}
+
+#ListadoMaquinas ul.price {
+	margin: 4px 0px 0px;
+	text-transform: uppercase;
+}
+
+ul.price li {
+	float: left;
+	width: 100%;
+	height:20px !important;
+	font-size: 15px;
+	font-weight: 400;
+	border:none !important;
+}
+
+ul.price li span {
+	float: left;
+	margin-right: 5px;
+}
+
+#ListadoMaquinas .button {
+	padding: 3px 12px;
+	margin: 16px 0px 0px;
+	font-size: 11px;
+}
+
+#ListadoMaquinas ul.features li {
+	border-bottom: 1px dotted #e2e2e2;
+	padding:5px;
+	margin:0px;
+	height:20px !important;
+}
+
+#ListadoMaquinas ul.price li {
+	color: #FFCD00;
+}
+
+#ListadoMaquinas .button {
+	color: #000000;
+	background: #FFCD00;
+}
+
+#ListadoMaquinas .button:hover{
+	background: #FFE373;
+	color: #333333;
+}
+
+#ListadoMaquinas img {
+	height: 180px;
+	width: 300px;
+}
+
+.item img{
+	width: 100%;
+}
+
+#onload{
+	height: 280px;
+	text-align: center;
+	padding: 100px;
+}
+
+.jsEliminar{
+	cursor: pointer;
+}
+
+article{
+	margin-top: 30px;
+	margin-bottom: 30px;
+}
+
+.oculto{ display: none;}
