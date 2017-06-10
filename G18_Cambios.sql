@@ -17,35 +17,100 @@ ALTER TABLE GR18_Competencia
 ADD CONSTRAINT gr18_ck_1 CHECK ( cantJueces > 0 ); 
 
 
-
 -- b. Un deportista no puede formar parte de más de tres equipos en un mismo año.
 -- Restriccion en tabla GR18_Inscripcion
 
+/*
+
+-- va al informe
+
 CREATE ASSERSTION gr18_ck_2
 CHECK NOT EXISTS ( 
-    SELECT COUNT(tipoDoc,nroDoc) as cantidad, EXTRACT (YEAR from fecha) AS anio
-    FROM GR18_Inscripcion I
-    JOIN GR18_EquipoDeportista E
-    ON (I.Equipo_id = E.id)
-    WHERE I.Equipo_id IS NOT NULL
-    GROUP BY anio
-    HAVING cantidad > 3   
+        SELECT E.nrodoc, count(E.id), EXTRACT (YEAR from I.fechaalta) as anio
+        FROM GR18_Equipo I
+        JOIN GR18_EquipoDeportista E
+        ON (I.id = E.id)
+        WHERE I.id IS NOT NULL
+        GROUP BY E.nrodoc, anio
+        HAVING count(E.id) > 3
 );
+*/
+
+-- TRIGGER
+CREATE OR REPLACE FUNCTION TRFN_GR18_Equipo_Masdetres() 
+RETURNS trigger AS $$
+DECLARE cantidad integer;    
+BEGIN    
+    SELECT E.nrodoc, INTO cantidad count(E.id), EXTRACT (YEAR from I.fechaalta) as anio
+    FROM GR18_Equipo I
+    JOIN GR18_EquipoDeportista E
+    ON (I.id = E.id)
+    WHERE I.id IS NOT NULL
+    GROUP BY E.nrodoc, anio
+    HAVING count(E.id) > 3;
+    IF (cantidad > 3) THEN
+        RAISE EXCEPTION 'Un deportista no puede formar parte de más de tres equipos en un mismo año.';
+    END IF;    
+    RETURN NEW;
+END; $$
+LANGUAGE 'plpgsql';
+
+DROP TRIGGER TR_GR18_Equipo_Masdetres ON GR18_Equipo;
+CREATE TRIGGER TR_GR18_Equipo_Masdetres
+AFTER INSERT ON GR18_Equipo
+FOR EACH STATEMENT EXECUTE PROCEDURE TRFN_GR18_Equipo_Masdetres();
+
+
 
 -- c. Las inscripciones no se pueden realizar luego de la fecha límite de inscripción.
 -- Restriccion en tabla GR18_Inscripcion
     
+
+/*
+
+-- va al informe
+
+
+CREATE ASSERSTION gr18_ck_2
+CHECK NOT EXISTS ( 
     SELECT 1
     FROM GR18_Inscripcion I
     JOIN GR18_Competencia C
     ON (C.idCompetencia = I.idCompetencia)
     WHERE I.fecha > C.fechaLimiteInscripcion
+);
+
+*/
+
+CREATE OR REPLACE FUNCTION TRFN_GR18_Inscripcion_FechaLimite() 
+RETURNS trigger AS $$
+DECLARE flag integer;    
+BEGIN    
+    SELECT INTO flag 1
+    FROM GR18_Inscripcion I
+    JOIN GR18_Competencia C
+    ON (C.idCompetencia = I.idCompetencia)
+    WHERE I.fecha > C.fechaLimiteInscripcion;
+    IF (flag = 1) THEN
+        RAISE EXCEPTION 'Las inscripciones no se pueden realizar luego de la fecha límite de inscripción.';
+    END IF;    
+    RETURN NEW;
+END; $$
+LANGUAGE 'plpgsql';
+
+DROP TRIGGER IF EXISTS TR_GR18_Inscripcion_FechaLimite ON GR18_Inscripcion;
+CREATE TRIGGER TR_GR18_Inscripcion_FechaLimite
+AFTER INSERT ON GR18_Inscripcion
+FOR EACH STATEMENT EXECUTE PROCEDURE TRFN_GR18_Inscripcion_FechaLimite();
+
+
+
 
 -- d. Para cada categoría la edad mínima debe ser por lo menos 10 años menos que la edad máxima.
 -- Restriccion en la tabla: 
 
     ALTER TABLE GR18_Categoria
-    ADD CONSTRAINT gr18_ck_1 CHECK( edadMinima <= (edadMaxima+10));
+    ADD CONSTRAINT gr18_ck_1 CHECK( edadMinima <= (edadMaxima-10));
 
 -- e. Sólo es posible realizar inscripciones de equipos o de deportistas; no de ambos.
 
@@ -58,42 +123,102 @@ CHECK NOT EXISTS (
         tipoDoc IS NULL AND 
         nroDoc IS NULL) );
 
--- f. Un juez que también es deportista, no puede participar en una competencia en la cual se desempeña como juez.
-
-
+-- f. Un juez que también es deportista, no puede participar en una competencia en la 
+-- cual se desempeña como juez.
 -- RESTRICCIONES EN: GR18_JuezCompetencia, GR18_Inscripcion and GR18_EquipoDeportista
 
-    SELECT 1
-    FROM GR18_Inscripcion I
-    JOIN GR18_JuezCompetencia J
-    ON (I.nroDoc = J.nroDoc AND 
-        I.tipoDoc = J.tipoDoc AND 
-        I.idCompetencia = J.idCompetencia)
+    CREATE OR REPLACE FUNCTION TRFN_GR18_Multiplestablas_Juezdeportista() 
+        RETURNS trigger AS $$
+        DECLARE flag1 integer;
+        DECLARE flag2 integer;    
+        BEGIN    
+            SELECT INTO flag1  1
+                FROM GR18_Inscripcion I
+                JOIN GR18_JuezCompetencia J
+                ON (I.nroDoc = J.nroDoc AND I.tipoDoc = J.tipoDoc AND I.idCompetencia = J.idCompetencia)
+            UNION
+            SELECT 1
+                FROM GR18_Inscripcion I
+                JOIN GR18_EquipoDeportista E
+                ON (I.Equipo_id = E.Id)
+                JOIN GR18_JuezCompetencia J
+                ON (E.nroDoc = J.nroDoc AND E.tipoDoc = J.tipoDoc AND I.idCompetencia = J.idCompetencia);
+            IF (flag1 = 1) THEN
+                RAISE EXCEPTION 'Un juez que también es deportista, no puede participar en una competencia en la cual se desempeña como juez';
+        END IF;    
+        RETURN NEW;
+    END; $$
+    LANGUAGE 'plpgsql';
 
 
-    SELECT 1
-    FROM GR18_Inscripcion I
-    JOIN GR18_EquipoDeportista E
-    ON (I.Equipo_id = E.Id)
-    JOIN GR18_JuezCompetencia J
-    ON (E.nroDoc = J.nroDoc AND 
-        E.tipoDoc = J.tipoDoc AND 
-        I.idCompetencia = J.idCompetencia)
+
+    DROP TRIGGER IF EXISTS TR_GR18_Inscripcion_Juezdeportista ON GR18_Inscripcion;
+    CREATE TRIGGER TR_GR18_Inscripcion_Juezdeportista
+    AFTER INSERT ON GR18_Inscripcion
+    FOR EACH STATEMENT EXECUTE PROCEDURE TRFN_GR18_Multiplestablas_Juezdeportista();
+
+
+    DROP TRIGGER IF EXISTS TR_GR18_equipodeportista_Juezdeportista ON GR18_equipodeportista;
+    CREATE TRIGGER TR_GR18_equipodeportista_Juezdeportista
+    AFTER INSERT ON GR18_equipodeportista
+    FOR EACH STATEMENT EXECUTE PROCEDURE TRFN_GR18_Multiplestablas_Juezdeportista();
+
+
+    DROP TRIGGER IF EXISTS TR_GR18_juezcompetencia_Juezdeportista ON GR18_juezcompetencia;
+    CREATE TRIGGER TR_GR18_juezcompetencia_Juezdeportista
+    AFTER INSERT ON GR18_juezcompetencia
+    FOR EACH STATEMENT EXECUTE PROCEDURE TRFN_GR18_Multiplestablas_Juezdeportista();
+
+
+
 
 
 -- g. Si la competencia es grupal no se deben permitir inscripciones individuales.
 
+-- VA AL INFORME
+/*
+CREATE ASSERSTION gr18_ck_3
+CHECK NOT EXISTS ( 
     SELECT 1 
     FROM GR18_Inscripcion I
     JOIN GR18_Competencia C
     ON (I.idCompetencia = C.idCompetencia)
-    WHERE I.individual = 1 
+    WHERE I.individual = B'1'
+*/
+
+
+    CREATE OR REPLACE FUNCTION TRFN_GR18_Inscripcion_Individuales() RETURNS trigger AS $$
+        DECLARE flag integer;
+        BEGIN                
+            SELECT INTO flag 1 
+            FROM GR18_Inscripcion I
+            JOIN GR18_Competencia C
+            ON (I.idCompetencia = C.idCompetencia)
+            WHERE C.individual = B'1';
+                IF (flag = 1) THEN
+                    RAISE EXCEPTION 'La competencia es grupal por lo tanto no se deben permitir inscripciones individuales';
+            END IF;    
+            RETURN NEW;
+        END; $$
+    LANGUAGE 'plpgsql';
+
+
+    DROP TRIGGER IF EXISTS TR_GR18_Inscripcion_Individuales ON GR18_Inscripcion;
+    CREATE TRIGGER TR_GR18_Inscripcion_Individuales
+    AFTER INSERT ON GR18_Inscripcion
+    FOR EACH STATEMENT EXECUTE PROCEDURE TRFN_GR18_Inscripcion_Individuales();
+
+
 
 
 -- h. Se debe controlar que en la clasificación, por cada competencia grupal, todos los integrantes de cada equipo tengan asignados los mismos puntos y puestos
 -- restriccion de tabla: GR18_ClasificacionCompetencia
 
-    SELECT COUNT(*) as cantidad, puestoGeneral, puntosGeneral, idCompetencia, Equipo_id 
+
+    CREATE OR REPLACE FUNCTION TRFN_GR18_ClasificacionCompetencia_mismos() RETURNS trigger AS $$
+        DECLARE flag integer;
+        BEGIN   
+    SELECT INTO flag COUNT(*) as cantidad, CC.puestoGeneral, CC.puntosGeneral, CC.idCompetencia, I.Equipo_id 
     FROM GR18_ClasificacionCompetencia CC
     JOIN GR18_Competencia C
     ON ( CC.idCompetencia = C.idCompetencia )
@@ -103,9 +228,24 @@ CHECK NOT EXISTS (
     ON ( E.id = I.Equipo_id )
     JOIN GR18_Deportista D
     ON ( E.nroDoc = D.nroDoc AND E.tipoDoc = D.tipoDoc )
-    WHERE C.individual = 0
-    GROUP BY ( puestoGeneral, puntosGeneral, idCompetencia, Equipo_id )
-    HAVING cantidad <> (SELECT COUNT(*) FROM GR18_EquipoDeportista WHERE id = E.id )
+    WHERE C.individual = B'0'
+    GROUP BY ( CC.puestoGeneral, CC.puntosGeneral, CC.idCompetencia, I.Equipo_id )
+    HAVING COUNT(*) <> (SELECT COUNT(*) FROM GR18_EquipoDeportista WHERE id = I.Equipo_id );
+
+               IF (flag = 1) THEN
+                    RAISE EXCEPTION 'La competencia es grupal por lo tanto no se deben permitir inscripciones individuales';
+            END IF;    
+            RETURN NEW;
+        END; $$
+    LANGUAGE 'plpgsql';
+
+
+    DROP TRIGGER IF EXISTS TR_GR18_ClasificacionCompetencia_mismos ON GR18_ClasificacionCompetencia;
+    CREATE TRIGGER TR_GR18_ClasificacionCompetencia_mismos
+    AFTER INSERT ON GR18_ClasificacionCompetencia
+    FOR EACH STATEMENT EXECUTE PROCEDURE TRFN_GR18_ClasificacionCompetencia_mismos();
+
+
 
 ---
 --- 
