@@ -1,6 +1,6 @@
 -- TUDAI 2017
--- TRABAJO PRACTICO ESPECIAL 
--- BASES DE DATOS 
+-- TRABAJO PRACTICO ESPECIAL
+-- BASES DE DATOS
 -- Eduardo Bravo y Marcelo Prado
 
 
@@ -141,128 +141,128 @@ CREATE TABLE GR19_Persona (
 -- Reference: FK_GR19_ClasificacionCompetencia_Competencia (table: GR19_ClasificacionCompetencia)
 ALTER TABLE GR19_ClasificacionCompetencia ADD CONSTRAINT FK_GR19_ClasificacionCompetencia_Competencia
     FOREIGN KEY (idCompetencia)
-    REFERENCES GR19_Competencia (idCompetencia)  
-    NOT DEFERRABLE 
+    REFERENCES GR19_Competencia (idCompetencia)
+    NOT DEFERRABLE
     INITIALLY IMMEDIATE
 ;
 
 -- Reference: FK_GR19_ClasificacionCompetencia_Deportista (table: GR19_ClasificacionCompetencia)
 ALTER TABLE GR19_ClasificacionCompetencia ADD CONSTRAINT FK_GR19_ClasificacionCompetencia_Deportista
     FOREIGN KEY (tipoDoc, nroDoc)
-    REFERENCES GR19_Deportista (tipoDoc, nroDoc)  
-    NOT DEFERRABLE 
+    REFERENCES GR19_Deportista (tipoDoc, nroDoc)
+    NOT DEFERRABLE
     INITIALLY IMMEDIATE
 ;
 
 -- Reference: FK_GR19_Competencia_Disciplina (table: GR19_Competencia)
 ALTER TABLE GR19_Competencia ADD CONSTRAINT FK_GR19_Competencia_Disciplina
     FOREIGN KEY (cdoDisciplina)
-    REFERENCES GR19_Disciplina (cdoDisciplina)  
-    NOT DEFERRABLE 
+    REFERENCES GR19_Disciplina (cdoDisciplina)
+    NOT DEFERRABLE
     INITIALLY IMMEDIATE
 ;
 
 -- Reference: FK_GR19_Deportista_Categoria (table: GR19_Deportista)
 ALTER TABLE GR19_Deportista ADD CONSTRAINT FK_GR19_Deportista_Categoria
     FOREIGN KEY (cdoCategoria, cdoDisciplina)
-    REFERENCES GR19_Categoria (cdoCategoria, cdoDisciplina)  
-    NOT DEFERRABLE 
+    REFERENCES GR19_Categoria (cdoCategoria, cdoDisciplina)
+    NOT DEFERRABLE
     INITIALLY IMMEDIATE
 ;
 
 -- Reference: FK_GR19_Deportista_Federacion (table: GR19_Deportista)
 ALTER TABLE GR19_Deportista ADD CONSTRAINT FK_GR19_Deportista_Federacion
     FOREIGN KEY (cdoFederacion, cdoDisciplinaFederacion)
-    REFERENCES GR19_Federacion (cdoFederacion, cdoDisciplina)  
-    NOT DEFERRABLE 
+    REFERENCES GR19_Federacion (cdoFederacion, cdoDisciplina)
+    NOT DEFERRABLE
     INITIALLY IMMEDIATE
 ;
 
 -- Reference: FK_GR19_Deportista_Persona (table: GR19_Deportista)
 ALTER TABLE GR19_Deportista ADD CONSTRAINT FK_GR19_Deportista_Persona
     FOREIGN KEY (tipoDoc, nroDoc)
-    REFERENCES GR19_Persona (tipoDoc, nroDoc)  
-    NOT DEFERRABLE 
+    REFERENCES GR19_Persona (tipoDoc, nroDoc)
+    NOT DEFERRABLE
     INITIALLY IMMEDIATE
 ;
 
 -- Reference: FK_GR19_EquipoDeportista_Deportista (table: GR19_EquipoDeportista)
 ALTER TABLE GR19_EquipoDeportista ADD CONSTRAINT FK_GR19_EquipoDeportista_Deportista
     FOREIGN KEY (tipoDoc, nroDoc)
-    REFERENCES GR19_Deportista (tipoDoc, nroDoc)  
-    NOT DEFERRABLE 
+    REFERENCES GR19_Deportista (tipoDoc, nroDoc)
+    NOT DEFERRABLE
     INITIALLY IMMEDIATE
 ;
 
 -- Reference: FK_GR19_EquipoDeportista_Equipo (table: GR19_EquipoDeportista)
 ALTER TABLE GR19_EquipoDeportista ADD CONSTRAINT FK_GR19_EquipoDeportista_Equipo
     FOREIGN KEY (id)
-    REFERENCES GR19_Equipo (id)  
-    NOT DEFERRABLE 
+    REFERENCES GR19_Equipo (id)
+    NOT DEFERRABLE
     INITIALLY IMMEDIATE
 ;
 
 -- Reference: FK_GR19_Federacion_Disciplina (table: GR19_Federacion)
 ALTER TABLE GR19_Federacion ADD CONSTRAINT FK_GR19_Federacion_Disciplina
     FOREIGN KEY (cdoDisciplina)
-    REFERENCES GR19_Disciplina (cdoDisciplina)  
-    NOT DEFERRABLE 
+    REFERENCES GR19_Disciplina (cdoDisciplina)
+    NOT DEFERRABLE
     INITIALLY IMMEDIATE
 ;
 
 -- Reference: FK_GR19_Inscripcion_Competencia (table: GR19_Inscripcion)
 ALTER TABLE GR19_Inscripcion ADD CONSTRAINT FK_GR19_Inscripcion_Competencia
     FOREIGN KEY (idCompetencia)
-    REFERENCES GR19_Competencia (idCompetencia)  
-    NOT DEFERRABLE 
+    REFERENCES GR19_Competencia (idCompetencia)
+    NOT DEFERRABLE
     INITIALLY IMMEDIATE
 ;
 
 -- Reference: FK_GR19_Inscripcion_Deportista (table: GR19_Inscripcion)
 ALTER TABLE GR19_Inscripcion ADD CONSTRAINT FK_GR19_Inscripcion_Deportista
     FOREIGN KEY (tipoDoc, nroDoc)
-    REFERENCES GR19_Deportista (tipoDoc, nroDoc)  
-    NOT DEFERRABLE 
+    REFERENCES GR19_Deportista (tipoDoc, nroDoc)
+    NOT DEFERRABLE
     INITIALLY IMMEDIATE
 ;
 
 -- Reference: FK_GR19_Inscripcion_Equipo (table: GR19_Inscripcion)
 ALTER TABLE GR19_Inscripcion ADD CONSTRAINT FK_GR19_Inscripcion_Equipo
     FOREIGN KEY (Equipo_id)
-    REFERENCES GR19_Equipo (id)  
-    NOT DEFERRABLE 
+    REFERENCES GR19_Equipo (id)
+    NOT DEFERRABLE
     INITIALLY IMMEDIATE
 ;
 
 -- Reference: FK_GR19_JuezCompetencia_Competencia (table: GR19_JuezCompetencia)
 ALTER TABLE GR19_JuezCompetencia ADD CONSTRAINT FK_GR19_JuezCompetencia_Competencia
     FOREIGN KEY (idCompetencia)
-    REFERENCES GR19_Competencia (idCompetencia)  
-    NOT DEFERRABLE 
+    REFERENCES GR19_Competencia (idCompetencia)
+    NOT DEFERRABLE
     INITIALLY IMMEDIATE
 ;
 
 -- Reference: FK_GR19_JuezCompetencia_Juez (table: GR19_JuezCompetencia)
 ALTER TABLE GR19_JuezCompetencia ADD CONSTRAINT FK_GR19_JuezCompetencia_Juez
     FOREIGN KEY (tipoDoc, nroDoc)
-    REFERENCES GR19_Juez (tipoDoc, nroDoc)  
-    NOT DEFERRABLE 
+    REFERENCES GR19_Juez (tipoDoc, nroDoc)
+    NOT DEFERRABLE
     INITIALLY IMMEDIATE
 ;
 
 -- Reference: FK_GR19_Juez_Persona (table: GR19_Juez)
 ALTER TABLE GR19_Juez ADD CONSTRAINT FK_GR19_Juez_Persona
     FOREIGN KEY (tipoDoc, nroDoc)
-    REFERENCES GR19_Persona (tipoDoc, nroDoc)  
-    NOT DEFERRABLE 
+    REFERENCES GR19_Persona (tipoDoc, nroDoc)
+    NOT DEFERRABLE
     INITIALLY IMMEDIATE
 ;
 
 -- Reference: FK_GR19_categoria_disciplina (table: GR19_Categoria)
 ALTER TABLE GR19_Categoria ADD CONSTRAINT FK_GR19_categoria_disciplina
     FOREIGN KEY (cdoDisciplina)
-    REFERENCES GR19_Disciplina (cdoDisciplina)  
-    NOT DEFERRABLE 
+    REFERENCES GR19_Disciplina (cdoDisciplina)
+    NOT DEFERRABLE
     INITIALLY IMMEDIATE
 ;
 
@@ -382,9 +382,9 @@ INSERT INTO GR19_equipodeportista VALUES (1, 'dni', 20);
 -- Data for Name: GR19_inscripcion; Type: TABLE DATA; Schema: unc_246449; Owner: unc_246449
 --
 
-INSERT INTO GR19_inscripcion VALUES (12, 'dni', 20, 1, 12, '2017-06-09 00:00:00');
-INSERT INTO GR19_inscripcion VALUES (11, 'dni', 29587447, 1, 12, '2017-06-15 00:00:00');
-
+INSERT INTO GR19_inscripcion VALUES (11, 'dni', 20, NULL, 12, '2017-06-09 00:00:00');
+INSERT INTO GR19_inscripcion VALUES (12, 'dni', 29587447, NULL, 12, '2017-06-15 00:00:00');
+INSERT INTO GR19_inscripcion VALUES (13, NULL, NULL, 1, 12, '2017-06-09 00:00:00');
 
 --
 -- Data for Name: GR19_juez; Type: TABLE DATA; Schema: unc_246449; Owner: unc_246449
@@ -405,9 +405,3 @@ INSERT INTO GR19_juezcompetencia VALUES (1, 'dni', 34587447);
 --
 -- PostgreSQL database dump complete
 --
-
-
- 
- 
- 
-

@@ -25,7 +25,7 @@ ADD CONSTRAINT GR19_ck_1 CHECK ( cantJueces > 0 );
 -- va al informe
 
 CREATE ASSERSTION GR19_ck_2
-CHECK NOT EXISTS ( 
+CHECK NOT EXISTS (
         SELECT E.nrodoc, count(E.id), EXTRACT (YEAR from I.fechaalta) as anio
         FROM GR19_Equipo I
         JOIN GR19_EquipoDeportista E
@@ -37,10 +37,10 @@ CHECK NOT EXISTS (
 */
 
 -- TRIGGER
-CREATE OR REPLACE FUNCTION TRFN_GR19_Equipo_Masdetres() 
+CREATE OR REPLACE FUNCTION TRFN_GR19_Equipo_Masdetres()
 RETURNS trigger AS $$
-DECLARE cantidad integer;    
-BEGIN    
+DECLARE cantidad integer;
+BEGIN
     SELECT E.nrodoc, INTO cantidad count(E.id), EXTRACT (YEAR from I.fechaalta) as anio
     FROM GR19_Equipo I
     JOIN GR19_EquipoDeportista E
@@ -50,12 +50,12 @@ BEGIN
     HAVING count(E.id) > 3;
     IF (cantidad > 3) THEN
         RAISE EXCEPTION 'Un deportista no puede formar parte de más de tres equipos en un mismo año.';
-    END IF;    
+    END IF;
     RETURN NEW;
 END; $$
 LANGUAGE 'plpgsql';
 
-DROP TRIGGER TR_GR19_Equipo_Masdetres ON GR19_Equipo;
+DROP TRIGGER IF EXISTS TR_GR19_Equipo_Masdetres ON GR19_Equipo;
 CREATE TRIGGER TR_GR19_Equipo_Masdetres
 AFTER INSERT ON GR19_Equipo
 FOR EACH STATEMENT EXECUTE PROCEDURE TRFN_GR19_Equipo_Masdetres();
@@ -64,7 +64,7 @@ FOR EACH STATEMENT EXECUTE PROCEDURE TRFN_GR19_Equipo_Masdetres();
 
 -- c. Las inscripciones no se pueden realizar luego de la fecha límite de inscripción.
 -- Restriccion en tabla GR19_Inscripcion
-    
+
 
 /*
 
@@ -72,7 +72,7 @@ FOR EACH STATEMENT EXECUTE PROCEDURE TRFN_GR19_Equipo_Masdetres();
 
 
 CREATE ASSERSTION GR19_ck_2
-CHECK NOT EXISTS ( 
+CHECK NOT EXISTS (
     SELECT 1
     FROM GR19_Inscripcion I
     JOIN GR19_Competencia C
@@ -82,10 +82,10 @@ CHECK NOT EXISTS (
 
 */
 
-CREATE OR REPLACE FUNCTION TRFN_GR19_Inscripcion_FechaLimite() 
+CREATE OR REPLACE FUNCTION TRFN_GR19_Inscripcion_FechaLimite()
 RETURNS trigger AS $$
-DECLARE flag integer;    
-BEGIN    
+DECLARE flag integer;
+BEGIN
     SELECT INTO flag 1
     FROM GR19_Inscripcion I
     JOIN GR19_Competencia C
@@ -93,7 +93,7 @@ BEGIN
     WHERE I.fecha > C.fechaLimiteInscripcion;
     IF (flag = 1) THEN
         RAISE EXCEPTION 'Las inscripciones no se pueden realizar luego de la fecha límite de inscripción.';
-    END IF;    
+    END IF;
     RETURN NEW;
 END; $$
 LANGUAGE 'plpgsql';
@@ -123,15 +123,15 @@ FOR EACH STATEMENT EXECUTE PROCEDURE TRFN_GR19_Inscripcion_FechaLimite();
         tipoDoc IS NULL AND
         nroDoc IS NULL) );
 
--- f. Un juez que también es deportista, no puede participar en una competencia en la 
+-- f. Un juez que también es deportista, no puede participar en una competencia en la
 -- cual se desempeña como juez.
 -- RESTRICCIONES EN: GR19_JuezCompetencia, GR19_Inscripcion and GR19_EquipoDeportista
 
-    CREATE OR REPLACE FUNCTION TRFN_GR19_Multiplestablas_Juezdeportista() 
+    CREATE OR REPLACE FUNCTION TRFN_GR19_Multiplestablas_Juezdeportista()
         RETURNS trigger AS $$
         DECLARE flag1 integer;
-        DECLARE flag2 integer;    
-        BEGIN    
+        DECLARE flag2 integer;
+        BEGIN
             SELECT INTO flag1  1
                 FROM GR19_Inscripcion I
                 JOIN GR19_JuezCompetencia J
@@ -145,7 +145,7 @@ FOR EACH STATEMENT EXECUTE PROCEDURE TRFN_GR19_Inscripcion_FechaLimite();
                 ON (E.nroDoc = J.nroDoc AND E.tipoDoc = J.tipoDoc AND I.idCompetencia = J.idCompetencia);
             IF (flag1 = 1) THEN
                 RAISE EXCEPTION 'Un juez que también es deportista, no puede participar en una competencia en la cual se desempeña como juez';
-        END IF;    
+        END IF;
         RETURN NEW;
     END; $$
     LANGUAGE 'plpgsql';
@@ -178,8 +178,8 @@ FOR EACH STATEMENT EXECUTE PROCEDURE TRFN_GR19_Inscripcion_FechaLimite();
 -- VA AL INFORME
 /*
 CREATE ASSERSTION GR19_ck_3
-CHECK NOT EXISTS ( 
-    SELECT 1 
+CHECK NOT EXISTS (
+    SELECT 1
     FROM GR19_Inscripcion I
     JOIN GR19_Competencia C
     ON (I.idCompetencia = C.idCompetencia)
@@ -189,15 +189,15 @@ CHECK NOT EXISTS (
 
     CREATE OR REPLACE FUNCTION TRFN_GR19_Inscripcion_Individuales() RETURNS trigger AS $$
         DECLARE flag integer;
-        BEGIN                
-            SELECT INTO flag 1 
+        BEGIN
+            SELECT INTO flag 1
             FROM GR19_Inscripcion I
             JOIN GR19_Competencia C
             ON (I.idCompetencia = C.idCompetencia)
             WHERE C.individual = B'1';
                 IF (flag = 1) THEN
                     RAISE EXCEPTION 'La competencia es grupal por lo tanto no se deben permitir inscripciones individuales';
-            END IF;    
+            END IF;
             RETURN NEW;
         END; $$
     LANGUAGE 'plpgsql';
@@ -217,8 +217,8 @@ CHECK NOT EXISTS (
 
     CREATE OR REPLACE FUNCTION TRFN_GR19_ClasificacionCompetencia_mismos() RETURNS trigger AS $$
         DECLARE flag integer;
-        BEGIN   
-    SELECT INTO flag COUNT(*) as cantidad, CC.puestoGeneral, CC.puntosGeneral, CC.idCompetencia, I.Equipo_id 
+        BEGIN
+    SELECT INTO flag COUNT(*) as cantidad, CC.puestoGeneral, CC.puntosGeneral, CC.idCompetencia, I.Equipo_id
     FROM GR19_ClasificacionCompetencia CC
     JOIN GR19_Competencia C
     ON ( CC.idCompetencia = C.idCompetencia )
@@ -234,7 +234,7 @@ CHECK NOT EXISTS (
 
                IF (flag = 1) THEN
                     RAISE EXCEPTION 'La competencia es grupal por lo tanto no se deben permitir inscripciones individuales';
-            END IF;    
+            END IF;
             RETURN NEW;
         END; $$
     LANGUAGE 'plpgsql';
@@ -332,9 +332,9 @@ BEGIN
     WHERE JC.nroDoc = $1;
 END;
 $A$
-SELECT GR19_jueces(34587447);
 LANGUAGE 'plpgsql';
 
+SELECT GR19_jueces(34587447);
 ---
 ---
 --- VISTAS
